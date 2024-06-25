@@ -19,6 +19,7 @@ import {
   URL_Sale_Bill,
   URL_get_sale_by_date,
 } from "../url/url";
+import LastBill from "./LastBill.js";
 
 const SaleEntry = () => {
   //message data
@@ -30,6 +31,8 @@ const SaleEntry = () => {
   const [selectedDate, setSelectedDate] = useState("");
   // Second date
   const [selectedSecDate, setSelectedSecDate] = useState("");
+
+  const [showLastbillComponent, setShowLastbillComponent] = useState(false);
 
   //customer
   const [customer, Setcustomer] = useState([]);
@@ -54,6 +57,9 @@ const SaleEntry = () => {
   const [SalebillData, SetSalebillData] = useState([]);
   const [selectedsaleDate, SetselectedsaleDate] = useState("");
   const [selectedsecsaleDate, SetselectedsecsaleDate] = useState("");
+
+  // State variable for response data
+  const [ResBillData, setResBillData] = useState(null);
 
   const { register, control, handleSubmit, setValue, reset, getValues } =
     useForm({
@@ -106,8 +112,18 @@ const SaleEntry = () => {
       price: "",
     });
   };
-
+  const handleClick = () => {
+    setShowLastbillComponent(!showLastbillComponent);
+  };
   const onSubmit = async (data) => {
+    const confirmSubmission = window.confirm(
+      "Are you sure you want to submit the form?"
+    );
+
+    if (!confirmSubmission) {
+      return; // Exit the function if the user selects "No"
+    }
+
     try {
       const requestData = {
         customer: data.customer,
@@ -117,30 +133,6 @@ const SaleEntry = () => {
 
       let response;
       if (editMode) {
-        // Function to send the POST request with ObjectId and form data
-        // async function sendDataToRealm(arg1, formData) {
-        //   console.log(arg1);
-        //   console.log(formData);
-        //   try {
-        //     // Construct the payload with ObjectId and form data
-        //     const payload = {
-        //       arg1: arg1,
-        //       formData: formData,
-        //     };
-        //     const response = await axios.post(URL_ORD_update, payload);
-        //     // Log the response from the MongoDB Realm function
-        //     console.log("Response:", response.data);
-        //     setSuccessMessage("Data updated successfully!");
-        //     setShowPopup(true);
-        //   } catch (error) {
-        //     console.error(
-        //       "Error:",
-        //       error.response ? error.response.data : error.message
-        //     );
-        //   }
-        // }
-        // Call the function to send data to MongoDB Realm
-        // sendDataToRealm(selectid, requestData);
         response = await axios.post(URL_Sale_Bill, requestData);
         setShowPopup(true);
         // Refresh the page
@@ -148,14 +140,16 @@ const SaleEntry = () => {
         setSuccessMessage("Data updated successfully!");
       } else {
         response = await axios.post(URL_Sale_Bill, requestData);
-        setShowPopup(true);
+        // setShowPopup(true);
         // Refresh the page
-        window.location.reload();
-        setSuccessMessage("Data updated successfully!");
+        setShowLastbillComponent(true);
+
+        // setSuccessMessage("Data updated successfully!");
       }
 
-      console.log("Server Response:", response.data);
-
+      setResBillData(response.data);
+      console.log(ResBillData);
+      reset();
       setEditMode(false);
     } catch (error) {
       console.error("Error while submitting data:", error);
@@ -430,6 +424,7 @@ const SaleEntry = () => {
   const closeModal = () => {
     setshowOrderPrintPreModal(false);
     setshowOrderByProduct(false);
+    setShowLastbillComponent(false);
     setSelectid(null);
   };
 
@@ -784,6 +779,9 @@ const SaleEntry = () => {
                   type="text"
                   {...register("bill_details.transport")}
                   placeholder="Transport"
+                  onKeyDown={(e) =>
+                    handleKeyDown(e, onAddProduct, fields, remove)
+                  }
                 />
               </div>
               <div>
@@ -793,6 +791,9 @@ const SaleEntry = () => {
                   type="number"
                   {...register("bill_details.total_quantity")}
                   placeholder="Total Quantity"
+                  onKeyDown={(e) =>
+                    handleKeyDown(e, onAddProduct, fields, remove)
+                  }
                 />
               </div>
             </div>
@@ -842,6 +843,9 @@ const SaleEntry = () => {
                   type="number"
                   {...register("bill_details.credit")}
                   placeholder="Credit"
+                  onKeyDown={(e) =>
+                    handleKeyDown(e, onAddProduct, fields, remove)
+                  }
                 />
               </div>
               <div>
@@ -851,6 +855,9 @@ const SaleEntry = () => {
                   type="number"
                   {...register("bill_details.cash")}
                   placeholder="Cash"
+                  onKeyDown={(e) =>
+                    handleKeyDown(e, onAddProduct, fields, remove)
+                  }
                 />
               </div>
             </div>
@@ -885,6 +892,13 @@ const SaleEntry = () => {
               prodct catagry
             </a>
           </center>
+
+          <button onClick={handleClick}>
+            {showLastbillComponent ? "Hide Component" : "Show Component"}
+          </button>
+          {showLastbillComponent && (
+            <LastBill billData={ResBillData} closeModal={closeModal} />
+          )}
         </form>
       </div>
 

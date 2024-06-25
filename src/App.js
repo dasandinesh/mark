@@ -18,6 +18,7 @@ import ExpenseList from "./components/accounts/ExpenseList";
 import PurchaseEntry from "./components/purchase/purchaseentry";
 import Purchasemenu from "./components/setting/Purchasemenu";
 import SaleGstEntry from "./components/salegst/Salegstentry";
+import LastBill from "./components/sale/LastBill";
 function App() {
   // State to hold the selected order
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -48,6 +49,8 @@ function App() {
           <Route path="/PurchaseEntry" element={<PurchaseEntry />} />
           <Route path="/Purchasemenu" element={<Purchasemenu />} />
           <Route path="/SaleGstEntry" element={<SaleGstEntry />} />
+          <Route path="/LastBill" element={<LastBill />} />
+
           <Route
             path="/orderprint"
             element={<OrderPrintPre selectedOrder={selectedOrder} />}
