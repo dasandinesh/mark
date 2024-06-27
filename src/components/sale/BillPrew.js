@@ -1,7 +1,7 @@
 import "./../order/orderprintpre.css";
 import React, { useRef, useState } from "react";
 
-const LastBill = ({ billData, closeModal }) => {
+const BillPrew = ({ selectedOrder, closeModal }) => {
   const modalRef = useRef(null);
   const [printFormat, setPrintFormat] = useState("A4");
 
@@ -44,12 +44,11 @@ const LastBill = ({ billData, closeModal }) => {
     }
   };
 
-  if (!billData) {
+  if (!selectedOrder) {
     return null; // If billData is null or undefined, do not render anything
   }
 
-  const { customer, products, bill_details, serial_number } = billData;
-
+  const { customer, products, bill_details, serial_number } = selectedOrder;
   const renderA4Template = () => {
     return `
       <center><h4>Estimate (A4)</h4></center>
@@ -176,8 +175,9 @@ const LastBill = ({ billData, closeModal }) => {
       <div class="row date">
         <div class="col"><b>Party name:</b><div>${customer.name}</div></div>
         
-        <div class="col"><b>Bill Date:</b><div>${bill_details.bill_date}</div>
-        ${serial_number}
+        <div class="col"><b>Bill Date:</b>
+        <div>${bill_details.bill_date}</div>
+        <div>${serial_number}</div>
         </div>
       </div>
       <div class="table-wrapper">
@@ -581,4 +581,4 @@ const LastBill = ({ billData, closeModal }) => {
   );
 };
 
-export default LastBill;
+export default BillPrew;

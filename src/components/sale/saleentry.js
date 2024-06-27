@@ -7,7 +7,7 @@ import axios from "axios";
 import OrderPrintPre from "./orderPrintPre";
 import OrderByProduct from "./OrderByProduct";
 import "./order.css";
-
+import BillPrew from "./BillPrew.js";
 import {
   URL_ORD_update,
   URL_ORD_list,
@@ -61,7 +61,7 @@ const SaleEntry = () => {
   // State variable for response data
   const [ResBillData, setResBillData] = useState(null);
 
-  const { register, control, handleSubmit, setValue, reset, getValues } =
+  const { register, control, handleSubmit, setValue, reset, getValues, watch } =
     useForm({
       defaultValues: {
         customer: { name: "" },
@@ -471,6 +471,19 @@ const SaleEntry = () => {
     });
     setValue("bill_details.bill_amount", totalAmount.toFixed(2));
   };
+
+  const products = watch("products");
+  useEffect(() => {
+    let totalQuantity = 0;
+
+    products.forEach((product) => {
+      const quantity = parseFloat(product.quantity) || 0;
+      const singlePrice = parseFloat(product.single_price) || 0;
+      totalQuantity = totalQuantity + quantity;
+    });
+    setValue("bill_details.total_quantity", totalQuantity);
+  }, [products, setValue]);
+
   return (
     <div className="main row">
       {/* Render the Popup component if showPopup is true */}
@@ -745,7 +758,7 @@ const SaleEntry = () => {
                     </td>
                     <td>
                       <button type="button" onClick={() => remove(index)}>
-                        Remove
+                        &#x2715;
                       </button>
                     </td>
                   </tr>
@@ -1060,7 +1073,7 @@ const SaleEntry = () => {
         </div>
       </div>
       {showOrderPrintPreModal && (
-        <OrderPrintPre selectedOrder={selectedOrder} closeModal={closeModal} />
+        <BillPrew selectedOrder={selectedOrder} closeModal={closeModal} />
       )}
       {showOrderByProduct && <OrderByProduct closeModal={closeModal} />}
     </div>
