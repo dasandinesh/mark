@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Purchasemenu = () => {
+export const Purchasemenu = () => {
   const [formData, setFormData] = useState({
     bill_form: false,
     serial_no: false,
@@ -417,4 +417,3 @@ const Purchasemenu = () => {
     </div>
   );
 };
-export default Purchasemenu;

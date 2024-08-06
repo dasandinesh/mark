@@ -91,7 +91,7 @@ input {
   font-size: 12.6pt;
   border-radius: 3px;
   border: solid 1.5px #d3d3d3;
-  -webkit-transition: 1s; /* Safari */
+  -webkit-transition: 1s;
   transition: 1s;
 }
 

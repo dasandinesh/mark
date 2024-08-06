@@ -19,6 +19,11 @@ import PurchaseEntry from "./components/purchase/purchaseentry";
 import Purchasemenu from "./components/setting/Purchasemenu";
 import SaleGstEntry from "./components/salegst/Salegstentry";
 import LastBill from "./components/sale/LastBill";
+import BranchList from "./components/company/BranchList";
+import CompanyList from "./components/company/CompanyList";
+import UserList from "./components/user/UserList";
+import Test from "./components/accounts/test";
+import Test2 from "./components/accounts/test2";
 function App() {
   // State to hold the selected order
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -50,6 +55,11 @@ function App() {
           <Route path="/Purchasemenu" element={<Purchasemenu />} />
           <Route path="/SaleGstEntry" element={<SaleGstEntry />} />
           <Route path="/LastBill" element={<LastBill />} />
+          <Route path="/company" element={<CompanyList />} />
+          <Route path="/branch" element={<BranchList />} />
+          <Route path="/userlist" element={<UserList />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/test2" element={<Test2 />} />
 
           <Route
             path="/orderprint"

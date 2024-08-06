@@ -22,6 +22,8 @@ import {
 import LastBill from "./LastBill.js";
 
 const SaleEntry = () => {
+  const [isCash, setIsCash] = useState(true); // default to cash
+
   //message data
   const [successMessage, setSuccessMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -187,36 +189,6 @@ const SaleEntry = () => {
   useEffect(() => {
     get_sale_list_date(selectedsaleDate, selectedsecsaleDate);
   }, [selectedsaleDate, selectedsecsaleDate]);
-
-  // useEffect(() => {
-  //   get_order_list_date(selectedDate, selectedSecDate);
-  // }, [selectedDate, selectedSecDate]);
-  // useEffect(() => {
-  //   get_order_list_date(selectedDate, selectedSecDate);
-  // }, []);
-
-  // const get_order_list_date = async (selectedDate, selectedSecDate) => {
-  //   try {
-  //     const response = await axios.get(get_order_by_date, {
-  //       params: {
-  //         arg1: selectedDate,
-  //         arg2: selectedSecDate,
-  //       },
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     if (response.data) {
-  //       setFilteredOrderList(response.data);
-  //       console.log(response.data);
-  //     } else {
-  //       console.log("ok");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching order list:", error);
-  //     setFilteredOrderList([]);
-  //   }
-  // };
 
   useEffect(() => {
     const get_order_list_date = async (selectedDate, selectedSecDate) => {
@@ -483,6 +455,22 @@ const SaleEntry = () => {
     });
     setValue("bill_details.total_quantity", totalQuantity);
   }, [products, setValue]);
+  const handleCheckboxChange = () => {
+    setIsCash(!isCash);
+    if (!isCash) {
+      setValue("customer.name", "");
+    } else {
+      setValue("customer.name", "Cash");
+      setTimeout(() => {
+        const productNameInput = document.querySelector(
+          '[name="products.0.name"]'
+        );
+        if (productNameInput) {
+          productNameInput.focus();
+        }
+      }, 0);
+    }
+  };
 
   return (
     <div className="main row">
@@ -500,50 +488,65 @@ const SaleEntry = () => {
           <div className="row">
             <div className="col-4">
               <div className="customer-container">
-                <div className="customer-select">
-                  <p>Customer Name:</p>
-                  <input
-                    type="text"
-                    {...register("customer.name")}
-                    placeholder="Customer Name"
-                    required
-                    list="cusSuggestion"
-                    onChange={handleCustomerChange}
-                  />
-                  <datalist id="cusSuggestion">
-                    {customer.map((customer, index) => (
-                      <option key={index} value={customer.name} />
-                    ))}
-                  </datalist>
-                  <div>
-                    <br />
-                    <h6>oldBalance:</h6>
-                    {selectedcustomer && <p>{selectedcustomer.oldBalance}</p>}
+                <>
+                  <div className="customer-select">
+                    <div className="payment-type-checkbox">
+                      <label>
+                        <input
+                          className="checkbox"
+                          type="checkbox"
+                          checked={!isCash}
+                          onChange={handleCheckboxChange}
+                        />
+                        {isCash ? "customer" : "cash"}
+                      </label>
+                    </div>
+                    <p>Customer Name:</p>
+                    <input
+                      type="text"
+                      {...register("customer.name")}
+                      placeholder="Customer Name"
+                      required
+                      id="product-name"
+                      list="cusSuggestion"
+                      onChange={handleCustomerChange}
+                    />
+                    <datalist id="cusSuggestion">
+                      {customer.map((customer, index) => (
+                        <option key={index} value={customer.name} />
+                      ))}
+                    </datalist>
+                    <div>
+                      <br />
+                      <h6>oldBalance:</h6>
+                      {selectedcustomer && <p>{selectedcustomer.oldBalance}</p>}
+                    </div>
                   </div>
-                </div>
-                <div className="customer-details">
-                  <h5>BILL TO:</h5>
-                  {selectedcustomer && (
-                    <address className="bill-to">
-                      <p>{selectedcustomer.name},</p>
-                      <p>
-                        {selectedcustomer.door}, {selectedcustomer.street},{" "}
-                        {selectedcustomer.area},
-                      </p>
-                      <p>
-                        {selectedcustomer.district},{selectedcustomer.state}.
-                      </p>
-                      <p>
-                        <label>Pin code: </label>
-                        {selectedcustomer.pincode}
-                      </p>
-                      <p>
-                        <label>Phone: </label>
-                        {selectedcustomer.phone}
-                      </p>
-                    </address>
-                  )}
-                </div>
+
+                  <div className="customer-details">
+                    <h5>BILL TO:</h5>
+                    {selectedcustomer && (
+                      <address className="bill-to">
+                        <p>{selectedcustomer.name},</p>
+                        <p>
+                          {selectedcustomer.door}, {selectedcustomer.street},{" "}
+                          {selectedcustomer.area},
+                        </p>
+                        <p>
+                          {selectedcustomer.district},{selectedcustomer.state}.
+                        </p>
+                        <p>
+                          <label>Pin code: </label>
+                          {selectedcustomer.pincode}
+                        </p>
+                        <p>
+                          <label>Phone: </label>
+                          {selectedcustomer.phone}
+                        </p>
+                      </address>
+                    )}
+                  </div>
+                </>
               </div>
             </div>
             <div className="col-3">

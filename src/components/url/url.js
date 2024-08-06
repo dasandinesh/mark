@@ -38,3 +38,9 @@ export const URL_new_expense =
   "https://ap-south-1.aws.data.mongodb-api.com/app/data-muggu/endpoint/Expense_new";
 export const URL_purchaseentry =
   "https://ap-south-1.aws.data.mongodb-api.com/app/data-muggu/endpoint/purchaseentry";
+export const URL_CompanyNewAdd =
+  "https://ap-south-1.aws.data.mongodb-api.com/app/data-muggu/endpoint/companynewadd";
+export const URL_CompanyListGet =
+  "https://ap-south-1.aws.data.mongodb-api.com/app/data-muggu/endpoint/companylistget ";
+export const URL_userAdd =
+  "https://ap-south-1.aws.data.mongodb-api.com/app/data-muggu/endpoint/useradd";

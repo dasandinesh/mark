@@ -1,8 +1,7 @@
-input {
-  width: 150px;
-}
 /* styles.css */
-
+.checkbox {
+  width: 20px;
+}
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -156,4 +155,20 @@ td {
 .col {
   flex: 1;
   padding: 0 15px;
+}
+.table-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.table-scroll-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-scroll-container th,
+.table-scroll-container td {
+  border: 1px solid #ddd;
+  padding-left: 8px;
+  text-align: center;
 }
